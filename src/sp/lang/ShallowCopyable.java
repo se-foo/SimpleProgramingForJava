@@ -1,5 +1,5 @@
 /*
-sp.base.NonNullReturnValue
+sp.lang.ShallowCopyable
 
 Copyright (c) 2017 Se-foo
 
