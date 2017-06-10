@@ -114,14 +114,10 @@ public class DeepCopyableTddTest {
     @Test
     public void test() {
 
-        // #clone
+        // #deepclone
         DeepCopyableTddTest.Sample instance = new DeepCopyableTddTest.Sample("inner");
         DeepCopyableTddTest.Sample result = instance.deepclone();
-
-        // test @NonNullReturnValue
         assertThat(result, notNullValue());
-
-        // test result of #clone
         assertThat(result != instance, is(true));
         assertThat(result.getClass() == instance.getClass(), is(true));
         assertThat(Objects.equals(result, instance), is(true));
