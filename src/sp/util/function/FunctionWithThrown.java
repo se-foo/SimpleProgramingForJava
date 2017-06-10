@@ -169,4 +169,23 @@ public interface FunctionWithThrown<X extends Throwable> {
         }
     }
 
+    /**
+     * <p>
+     * 単一のオペランドに作用してオペランドと同じ型の結果を生成する演算を表す.
+     * </p>
+     * <p>
+     * これは, {@link #apply(Object)} を関数メソッドに持つ関数型インタフェースである.
+     * </p>
+     *
+     * @author Se-foo
+     * @param <T>
+     *            演算子のオペランドと結果のクラス.
+     * @param <X>
+     *            評価中に発生するエラークラス.
+     * @since 0.1
+     */
+    @FunctionalInterface
+    static interface OfObjUnary<T, X extends Throwable> extends FunctionWithThrown.OfObj<T, T, X> {
+    }
+
 }
