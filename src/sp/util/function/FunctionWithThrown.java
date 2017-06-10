@@ -16,6 +16,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.LongUnaryOperator;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 /**
  * <p>
@@ -469,6 +470,146 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @return 変換後の関数.
          */
         default ToIntFunction<T> toFunction() {
+            return this.toFunction(cause -> new RuntimeException(cause));
+        }
+    }
+
+    /**
+     * <p>
+     * 1 つの引数を受け取って long 値の結果を生成する関数を表す.
+     * </p>
+     * <p>
+     * これは, {@link #apply(Object)} を関数メソッドに持つ関数型インタフェースである.
+     * </p>
+     *
+     * @author Se-foo
+     * @param <T>
+     *            関数の入力クラス.
+     * @param <X>
+     *            評価中に発生するエラークラス.
+     * @since 0.1
+     */
+    @FunctionalInterface
+    static interface OfObjToLong<T, X extends Throwable> extends FunctionWithThrown<X> {
+
+        /**
+         * 指定された引数にこの関数を適用する.
+         *
+         * @param target
+         *            入力引数.
+         * @return 関数の結果.
+         * @throws X
+         *             結果生成中にエラーが発生した場合.
+         */
+        long apply(T target) throws X;
+
+        /**
+         * まず入力に関数 before を適用し, 次に結果にこの関数を適用する合成関数を返す.
+         *
+         * @param <V>
+         *            before 関数および合成関数の入力クラス.
+         * @param before
+         *            この関数を適用する前に適用する関数.
+         * @return まず before 関数を適用し, 次にこの関数を適用する合成関数.
+         * @throws NullPointerException
+         *             before 関数が NULL の場合.
+         */
+        default <V> FunctionWithThrown.OfObjToLong<V, X> compose(
+                FunctionWithThrown.OfObj<? super V, ? extends T, ? extends X> before) {
+            Objects.requireNonNull(before);
+            return target -> this.apply(before.apply(target));
+        }
+
+        /**
+         * まず入力に関数 before を適用し, 次に結果にこの関数を適用する合成関数を返す.
+         *
+         * @param <V>
+         *            before 関数および合成関数の入力クラス.
+         * @param before
+         *            この関数を適用する前に適用する関数.
+         * @return まず before 関数を適用し, 次にこの関数を適用する合成関数.
+         * @throws NullPointerException
+         *             before 関数が NULL の場合.
+         */
+        default <V> FunctionWithThrown.OfObjToLong<V, X> composeFunction(Function<? super V, ? extends T> before) {
+            Objects.requireNonNull(before);
+            return target -> this.apply(before.apply(target));
+        }
+
+        /**
+         * まず入力にこの関数を適用し, 次に結果に関数 after を適用する合成関数を返す.
+         *
+         * @param <V>
+         *            after 関数および合成関数の出力クラス.
+         * @param after
+         *            この関数を適用した後で適用する関数.
+         * @return まずこの関数を適用し, 次に after 関数を適用する合成関数.
+         * @throws NullPointerException
+         *             after 関数が NULL の場合.
+         */
+        default <V> FunctionWithThrown.OfObjToLong<T, X> andThen(FunctionWithThrown.OfLong<? extends X> after) {
+            Objects.requireNonNull(after);
+            return target -> after.apply(this.apply(target));
+        }
+
+        /**
+         * まず入力にこの関数を適用し, 次に結果に関数 after を適用する合成関数を返す.
+         *
+         * @param after
+         *            この関数を適用した後で適用する関数.
+         * @return まずこの関数を適用し, 次に after 関数を適用する合成関数.
+         * @throws NullPointerException
+         *             after 関数が NULL の場合.
+         */
+        default FunctionWithThrown.OfObjToLong<T, X> andThenFunction(LongUnaryOperator after) {
+            Objects.requireNonNull(after);
+            return target -> after.applyAsLong(this.apply(target));
+        }
+
+        /**
+         * <p>
+         * {@link java.util.function.ToLongFunction} に変換する.
+         * </p>
+         * <p>
+         * 発生するエラー又は非チェック例外はそのままスローされる. チェック例外又は左記以外の {@link Throwable} は
+         * 非チェック例外生成関数 throwable を呼び出し, その結果がスローされる.
+         * </p>
+         *
+         * @param throwable
+         *            非チェック例外生成関数.
+         * @return 変換後の関数.
+         * @throws NullPointerException
+         *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
+         */
+        default ToLongFunction<T> toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
+            Objects.requireNonNull(throwable);
+            return target -> {
+                try {
+                    return this.apply(target);
+                } catch (RuntimeException e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw Objects.requireNonNull(throwable.apply(e));
+                } catch (Error e) {
+                    throw e;
+                } catch (Throwable e) {
+                    throw Objects.requireNonNull(throwable.apply(e));
+                }
+            };
+        }
+
+        /**
+         * <p>
+         * {@link java.util.function.ToLongFunction} に変換する.
+         * </p>
+         * <p>
+         * 発生するエラー又は非チェック例外はそのままスローされる. チェック例外又は左記以外の {@link Throwable} は
+         * {@link RuntimeException} でラッピングされてスローされる.
+         * </p>
+         *
+         * @return 変換後の関数.
+         */
+        default ToLongFunction<T> toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
     }
