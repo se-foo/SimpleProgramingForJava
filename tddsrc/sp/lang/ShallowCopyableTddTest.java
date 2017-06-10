@@ -48,10 +48,10 @@ public class ShallowCopyableTddTest {
          */
         @NonNullReturnValue
         @Override
-        public Sample clone() {
-            Sample returnValue = null;
+        public ShallowCopyableTddTest.Sample clone() {
+            ShallowCopyableTddTest.Sample returnValue = null;
             try {
-                returnValue = (Sample) super.clone();
+                returnValue = (ShallowCopyableTddTest.Sample) super.clone();
             } catch (CloneNotSupportedException e) {
                 assert false;
                 throw new InternalError(e);
@@ -67,7 +67,7 @@ public class ShallowCopyableTddTest {
          */
         @Override
         public int hashCode() {
-            return Objects.hash(Sample.class, this.inner);
+            return Objects.hash(ShallowCopyableTddTest.Sample.class, this.inner);
         }
 
         /*
@@ -78,8 +78,8 @@ public class ShallowCopyableTddTest {
         @Override
         public boolean equals(Object object) {
             boolean returnValue = false;
-            if (object instanceof Sample) {
-                Sample instance = (Sample) object;
+            if (object instanceof ShallowCopyableTddTest.Sample) {
+                ShallowCopyableTddTest.Sample instance = (ShallowCopyableTddTest.Sample) object;
                 returnValue = Objects.equals(instance.inner, this.inner);
             }
             return returnValue;
@@ -101,8 +101,8 @@ public class ShallowCopyableTddTest {
     public void test() {
 
         // #clone
-        Sample instance = new Sample(new Object());
-        Sample result = instance.clone();
+        ShallowCopyableTddTest.Sample instance = new ShallowCopyableTddTest.Sample(new Object());
+        ShallowCopyableTddTest.Sample result = instance.clone();
 
         // test @NonNullReturnValue
         assertThat(result, notNullValue());
