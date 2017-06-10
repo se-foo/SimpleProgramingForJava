@@ -103,11 +103,7 @@ public class ShallowCopyableTddTest {
         // #clone
         ShallowCopyableTddTest.Sample instance = new ShallowCopyableTddTest.Sample(new Object());
         ShallowCopyableTddTest.Sample result = instance.clone();
-
-        // test @NonNullReturnValue
         assertThat(result, notNullValue());
-
-        // test result of #clone
         assertThat(result != instance, is(true));
         assertThat(result.getClass() == instance.getClass(), is(true));
         assertThat(Objects.equals(result, instance), is(true));
