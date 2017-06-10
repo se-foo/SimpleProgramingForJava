@@ -1,14 +1,15 @@
 /*
-sp.util.function.Mapper
-sp.util.function.Mapper.*
+sp.base.var.Mapper
+sp.base.var.Mapper.*
 
 Copyright (c) 2017 Se-foo
 
 This software is released under the MIT License.
 http://opensource.org/licenses/mit-license.php
 */
-package sp.util.function;
+package sp.base.var;
 
+import sp.util.function.FunctionWithThrown;
 
 /**
  * マッピングによる変換機構.
