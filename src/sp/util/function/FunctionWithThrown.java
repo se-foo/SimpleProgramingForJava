@@ -18,6 +18,8 @@ import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 
+import sp.base.NonNullReturnValue;
+
 /**
  * <p>
  * {@link Throwable} がスローされる可能性がある 1 つの引数を受け取って結果を生成する関数を表す.
@@ -72,6 +74,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObj<V, R, X> compose(
                 FunctionWithThrown.OfObj<? super V, ? extends T, ? extends X> before) {
             Objects.requireNonNull(before);
@@ -89,6 +92,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObj<V, R, X> composeFunction(Function<? super V, ? extends T> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -105,6 +109,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObj<T, V, X> andThen(
                 FunctionWithThrown.OfObj<? super R, ? extends V, ? extends X> after) {
             Objects.requireNonNull(after);
@@ -122,6 +127,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObj<T, V, X> andThenFunction(Function<? super R, ? extends V> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -142,6 +148,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default Function<T, R> toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -170,6 +177,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default Function<T, R> toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -234,6 +242,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToDouble<V, X> compose(
                 FunctionWithThrown.OfObj<? super V, ? extends T, ? extends X> before) {
             Objects.requireNonNull(before);
@@ -251,6 +260,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToDouble<V, X> composeFunction(Function<? super V, ? extends T> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -267,6 +277,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToDouble<T, X> andThen(FunctionWithThrown.OfDouble<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -281,6 +292,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfObjToDouble<T, X> andThenFunction(DoubleUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsDouble(this.apply(target));
@@ -301,6 +313,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default ToDoubleFunction<T> toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -329,6 +342,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default ToDoubleFunction<T> toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -374,6 +388,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToInt<V, X> compose(
                 FunctionWithThrown.OfObj<? super V, ? extends T, ? extends X> before) {
             Objects.requireNonNull(before);
@@ -391,6 +406,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToInt<V, X> composeFunction(Function<? super V, ? extends T> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -407,6 +423,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToInt<T, X> andThen(FunctionWithThrown.OfInt<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -421,6 +438,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfObjToInt<T, X> andThenFunction(IntUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsInt(this.apply(target));
@@ -441,6 +459,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default ToIntFunction<T> toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -469,6 +488,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default ToIntFunction<T> toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -514,6 +534,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToLong<V, X> compose(
                 FunctionWithThrown.OfObj<? super V, ? extends T, ? extends X> before) {
             Objects.requireNonNull(before);
@@ -531,6 +552,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToLong<V, X> composeFunction(Function<? super V, ? extends T> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -547,6 +569,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default <V> FunctionWithThrown.OfObjToLong<T, X> andThen(FunctionWithThrown.OfLong<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -561,6 +584,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfObjToLong<T, X> andThenFunction(LongUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsLong(this.apply(target));
@@ -581,6 +605,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default ToLongFunction<T> toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -609,6 +634,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default ToLongFunction<T> toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -650,6 +676,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfDouble<X> compose(FunctionWithThrown.OfDouble<? extends X> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -664,6 +691,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfDouble<X> composeFunction(DoubleUnaryOperator before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.applyAsDouble(target));
@@ -678,6 +706,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfDouble<X> andThen(FunctionWithThrown.OfDouble<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -692,6 +721,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfDouble<X> andThenFunction(DoubleUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsDouble(this.apply(target));
@@ -712,6 +742,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default DoubleUnaryOperator toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -740,6 +771,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default DoubleUnaryOperator toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -781,6 +813,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfInt<X> compose(FunctionWithThrown.OfInt<? extends X> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -795,6 +828,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfInt<X> composeFunction(IntUnaryOperator before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.applyAsInt(target));
@@ -809,6 +843,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfInt<X> andThen(FunctionWithThrown.OfInt<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -823,6 +858,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfInt<X> andThenFunction(IntUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsInt(this.apply(target));
@@ -843,6 +879,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default IntUnaryOperator toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -871,6 +908,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default IntUnaryOperator toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
@@ -912,6 +950,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfLong<X> compose(FunctionWithThrown.OfLong<? extends X> before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.apply(target));
@@ -926,6 +965,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             before 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfLong<X> composeFunction(LongUnaryOperator before) {
             Objects.requireNonNull(before);
             return target -> this.apply(before.applyAsLong(target));
@@ -940,6 +980,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfLong<X> andThen(FunctionWithThrown.OfLong<? extends X> after) {
             Objects.requireNonNull(after);
             return target -> after.apply(this.apply(target));
@@ -954,6 +995,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             after 関数が NULL の場合.
          */
+        @NonNullReturnValue
         default FunctionWithThrown.OfLong<X> andThenFunction(LongUnaryOperator after) {
             Objects.requireNonNull(after);
             return target -> after.applyAsLong(this.apply(target));
@@ -974,6 +1016,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          * @throws NullPointerException
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          */
+        @NonNullReturnValue
         default LongUnaryOperator toFunction(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -1002,6 +1045,7 @@ public interface FunctionWithThrown<X extends Throwable> {
          *
          * @return 変換後の関数.
          */
+        @NonNullReturnValue
         default LongUnaryOperator toFunction() {
             return this.toFunction(cause -> new RuntimeException(cause));
         }
