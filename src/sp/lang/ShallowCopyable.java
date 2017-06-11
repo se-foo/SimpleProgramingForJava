@@ -8,6 +8,8 @@ http://opensource.org/licenses/mit-license.php
 */
 package sp.lang;
 
+import sp.base.NonNullReturnValue;
+
 /**
  * 浅いコピーを実装していることを表す.
  *
@@ -24,5 +26,6 @@ public interface ShallowCopyable<R> extends Cloneable {
      * @return このインスタンスの複製.
      * @since 0.1
      */
+    @NonNullReturnValue
     R clone();
 }
