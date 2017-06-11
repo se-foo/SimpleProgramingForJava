@@ -43,7 +43,7 @@ public class PredicateWithThrown_OfDoubleTddTest {
         this.thrown.expectMessage("1.1");
 
         // #test
-        PredicateWithThrown.OfDouble<NumberFormatException> instance = target -> cast(target) > 0;
+        PredicateWithThrown.OfDouble<ClassCastException> instance = target -> cast(target) > 0;
         assertThat(instance.test(1.0), is(true));
 
         // #negate
