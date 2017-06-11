@@ -16,6 +16,8 @@ import java.util.function.IntPredicate;
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
+import sp.base.NonNullReturnValue;
+
 /**
  * <p>
  * {@link Throwable} がスローされる可能性がある 1 つの引数の述語 (boolean 値関数) を表す.
@@ -63,6 +65,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return この述語の論理否定を表す述語.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         @Override
         default PredicateWithThrown.OfObj<T, X> negate() {
             return target -> !this.test(target);
@@ -83,6 +86,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfObj<T, X> and(PredicateWithThrown.OfObj<? super T, ? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -103,6 +107,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfObj<T, X> andPredicate(Predicate<? super T> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -123,6 +128,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfObj<T, X> or(PredicateWithThrown.OfObj<? super T, ? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -143,6 +149,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfObj<T, X> orPredicate(Predicate<? super T> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -164,6 +171,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          * @see #test(Object)
          */
+        @NonNullReturnValue
         default Predicate<T> toPredicate(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -193,6 +201,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return 変換後の述語 (boolean 値関数).
          * @see #toPredicate(Function)
          */
+        @NonNullReturnValue
         default Predicate<T> toPredicate() {
             return this.toPredicate(cause -> new RuntimeException(cause));
         }
@@ -231,6 +240,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return この述語の論理否定を表す述語.
          * @see #test(double)
          */
+        @NonNullReturnValue
         @Override
         default PredicateWithThrown.OfDouble<X> negate() {
             return target -> !this.test(target);
@@ -251,6 +261,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(double)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfDouble<X> and(PredicateWithThrown.OfDouble<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -271,6 +282,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(double)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfDouble<X> andPredicate(DoublePredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -291,6 +303,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(double)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfDouble<X> or(PredicateWithThrown.OfDouble<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -311,6 +324,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(double)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfDouble<X> orPredicate(DoublePredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -332,6 +346,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          * @see #test(double)
          */
+        @NonNullReturnValue
         default DoublePredicate toPredicate(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -361,6 +376,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return 変換後の述語 (boolean 値関数).
          * @see #toPredicate(Function)
          */
+        @NonNullReturnValue
         default DoublePredicate toPredicate() {
             return this.toPredicate(cause -> new RuntimeException(cause));
         }
@@ -399,6 +415,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return この述語の論理否定を表す述語.
          * @see #test(int)
          */
+        @NonNullReturnValue
         @Override
         default PredicateWithThrown.OfInt<X> negate() {
             return target -> !this.test(target);
@@ -419,6 +436,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(int)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfInt<X> and(PredicateWithThrown.OfInt<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -439,6 +457,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(int)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfInt<X> andPredicate(IntPredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -459,6 +478,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(int)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfInt<X> or(PredicateWithThrown.OfInt<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -479,6 +499,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(int)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfInt<X> orPredicate(IntPredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -500,6 +521,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          * @see #test(int)
          */
+        @NonNullReturnValue
         default IntPredicate toPredicate(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -529,6 +551,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return 変換後の述語 (boolean 値関数).
          * @see #toPredicate(Function)
          */
+        @NonNullReturnValue
         default IntPredicate toPredicate() {
             return this.toPredicate(cause -> new RuntimeException(cause));
         }
@@ -567,6 +590,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return この述語の論理否定を表す述語.
          * @see #test(long)
          */
+        @NonNullReturnValue
         @Override
         default PredicateWithThrown.OfLong<X> negate() {
             return target -> !this.test(target);
@@ -587,6 +611,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(long)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfLong<X> and(PredicateWithThrown.OfLong<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -607,6 +632,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(long)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfLong<X> andPredicate(LongPredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) && other.test(target);
@@ -627,6 +653,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(long)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfLong<X> or(PredicateWithThrown.OfLong<? extends X> other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -647,6 +674,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された述語 other が NULL の場合.
          * @see #test(long)
          */
+        @NonNullReturnValue
         default PredicateWithThrown.OfLong<X> orPredicate(LongPredicate other) {
             Objects.requireNonNull(other);
             return target -> this.test(target) || other.test(target);
@@ -668,6 +696,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          *             指定された非チェック例外生成関数が NULL, 又は生成された例外が NULL の場合.
          * @see #test(long)
          */
+        @NonNullReturnValue
         default LongPredicate toPredicate(Function<? super Throwable, ? extends RuntimeException> throwable) {
             Objects.requireNonNull(throwable);
             return target -> {
@@ -697,6 +726,7 @@ public interface PredicateWithThrown<X extends Throwable> {
          * @return 変換後の述語 (boolean 値関数).
          * @see #toPredicate(Function)
          */
+        @NonNullReturnValue
         default LongPredicate toPredicate() {
             return this.toPredicate(cause -> new RuntimeException(cause));
         }
@@ -707,6 +737,7 @@ public interface PredicateWithThrown<X extends Throwable> {
      *
      * @return この述語の論理否定を表す述語.
      */
+    @NonNullReturnValue
     PredicateWithThrown<X> negate();
 
 }
