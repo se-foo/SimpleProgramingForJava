@@ -442,7 +442,7 @@ public interface Argument {
              * @since 0.1
              */
             @Override
-            <X extends Throwable> Argument toInt(FunctionWithThrown.OfObjToInt<? super T, ? extends X> mapping)
+            <X extends Throwable> Argument.OfInt toInt(FunctionWithThrown.OfObjToInt<? super T, ? extends X> mapping)
                     throws X;
 
             /**
@@ -453,7 +453,7 @@ public interface Argument {
              * @see #mapToInt(ToIntFunction)
              * @since 0.1
              */
-            default Argument toHash() {
+            default Argument.OfInt toHash() {
                 return this.toInt(target -> Objects.hashCode(target));
             }
 
@@ -990,7 +990,7 @@ public interface Argument {
          *            終端. (これを含まない)
          * @return 本チェックストリーム.
          * @throws IllegalArgumentException
-         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         *             指定された始端が終端より大きい場合, 又はチェック対象が指定された範囲外の場合.
          * @see #requireBounds(int, int, Supplier)
          * @since 0.1
          */
@@ -1018,7 +1018,7 @@ public interface Argument {
          *            チェック対象が指定された範囲外の場合のエラーメッセージ.
          * @return 本チェックストリーム.
          * @throws IllegalArgumentException
-         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         *             指定された始端が終端より大きい場合, 又はチェック対象が指定された範囲外の場合.
          * @see #requireBounds(int, int, Supplier)
          * @since 0.1
          */
@@ -1048,7 +1048,7 @@ public interface Argument {
          * @throws NullPointerException
          *             エラーメッセージ生成関数が NULL の場合.
          * @throws IllegalArgumentException
-         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         *             指定された始端が終端より大きい場合, 又はチェック対象が指定された範囲外の場合.
          * @see #require(IntPredicate, IntFunction)
          * @since 0.1
          */
@@ -1060,6 +1060,94 @@ public interface Argument {
             Objects.requireNonNull(message);
 
             return this.require(target -> target >= from && target < to, target -> new IllegalArgumentException(
+                    Optional.ofNullable(message.get()).map(m -> m.toString()).orElse(null)));
+        }
+
+        /**
+         * <p>
+         * チェック対象がインデックスであることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が 0 より小さい又は指定されたサイズ以上の場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
+         * {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param size
+         *            サイズ.
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定されたサイズが 0 より小さい場合.
+         * @throws IndexOutOfBoundsException
+         *             チェック対象がインデックスでない場合.
+         * @see #requireIndex(int, Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfInt requireIndex(int size) {
+
+            // throw IllegalArgumentException if size < 0 at #requireIndex.
+            return this.requireIndex(size, () -> null);
+        }
+
+        /**
+         * <p>
+         * チェック対象がインデックスであることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が 0 より小さい又は指定されたサイズ以上の場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
+         * {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param size
+         *            サイズ.
+         * @param message
+         *            チェック対象が指定された範囲外の場合のエラーメッセージ.
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定されたサイズが 0 より小さい場合.
+         * @throws IndexOutOfBoundsException
+         *             チェック対象がインデックスでない場合.
+         * @see #requireIndex(int, Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfInt requireIndex(int size, CharSequence message) {
+
+            // throw IllegalArgumentException if size < 0 at #requireIndex.
+            return this.requireIndex(size, () -> message);
+        }
+
+        /**
+         * <p>
+         * チェック対象がインデックスであることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が 0 より小さい又は指定されたサイズ以上の場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
+         * {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param size
+         *            サイズ.
+         * @param message
+         *            チェック対象が指定された範囲外の場合のエラーメッセージ生成関数.
+         * @return 本チェックストリーム.
+         * @throws NullPointerException
+         *             エラーメッセージ生成関数が NULL の場合.
+         * @throws IllegalArgumentException
+         *             指定されたサイズが 0 より小さい場合.
+         * @throws IndexOutOfBoundsException
+         *             チェック対象がインデックスでない場合.
+         * @see #require(IntPredicate, IntFunction)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfInt requireIndex(int size, Supplier<? extends CharSequence> message) {
+            if (size < 0) {
+                throw new IllegalArgumentException();
+            }
+            Objects.requireNonNull(message);
+
+            return this.require(target -> target >= 0 && target < size, target -> new IndexOutOfBoundsException(
                     Optional.ofNullable(message.get()).map(m -> m.toString()).orElse(null)));
         }
 
@@ -1106,6 +1194,32 @@ public interface Argument {
             }
 
             return this.filter(target -> target >= from && target < to);
+        }
+
+        /**
+         * <p>
+         * チェック対象がインデックスであることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が 0 より小さい又は指定されたサイズ以上の場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
+         * {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param size
+         *            サイズ.
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定されたサイズが 0 より小さい場合.
+         * @see #filter(sp.util.function.PredicateWithThrown.OfInt)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfInt isIndex(int size) {
+            if (size < 0) {
+                throw new IllegalArgumentException();
+            }
+
+            return this.filter(target -> target >= 0 && target < size);
         }
 
         // TODO : need #map()
