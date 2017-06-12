@@ -25,6 +25,24 @@ public class Argument_OfObjTddTest {
         String target = "test";
         Argument.OfObj<String> instance = Variable.arg(target);
         assertThat(instance, notNullValue());
+        System.out.println(instance);
+
+        // #orElse
+        assertThat(instance.orElse("other"), is(target));
+
+        // #requireNonNull
+        assertThat(instance.requireNonNull(), is(instance));
+        assertThat(instance.requireNonNull("Null."), is(instance));
+
+        // #requireInstanceOf
+        assertThat(instance.requireInstanceOf(CharSequence.class), is(instance));
+        assertThat(instance.requireInstanceOf(CharSequence.class, "Implements No CharSequence."), is(instance));
+
+        // #nonNull
+        assertThat(instance.nonNull(), is(instance));
+
+        // #instanceOf
+        assertThat(instance.instanceOf(CharSequence.class), is(instance));
     }
 
 }
