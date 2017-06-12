@@ -342,155 +342,13 @@ public interface Argument {
             return this.filter(target -> classObject.isInstance(target));
         }
 
-        /**
-         * マッピングによるオブジェクト引数の前提条件の変換機構.
+        /*
+         * (非 Javadoc)
          *
-         * @author Se-foo
-         * @param <T>
-         *            マッピング変換元のチェック対象クラス.
-         * @since 0.1
+         * @see sp.base.var.Argument#map()
          */
-        static interface Mappper<T> extends Mapper.FromObj<T, Argument> {
-
-            /**
-             * <p>
-             * 指定されたマッピングを用いてチェック対象を変換する.
-             * </p>
-             * <p>
-             * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
-             * {@link Argument#check() check()} は FALSE を返す.
-             * </p>
-             *
-             * @param <A>
-             *            マッピングの変換先クラス.
-             * @param <X>
-             *            変換中に発生するエラークラス.
-             * @param mapping
-             *            チェック対象の変換に用いるマッピング.
-             * @return チェック対象変換後のチェックストリーム.
-             * @throws NullPointerException
-             *             チェック対象の変換に用いるマッピングが NULL の場合.
-             * @throws X
-             *             変換中にエラーが発生した場合.
-             * @since 0.1
-             */
-            @Override
-            <A, X extends Throwable> Argument.OfObj<A> toObj(
-                    FunctionWithThrown.OfObj<? super T, ? extends A, ? extends X> mapping) throws X;
-
-            /**
-             * <p>
-             * チェック対象をキャストする.
-             * </p>
-             * <p>
-             * チェック対象が指定されたクラスを継承していない場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
-             * {@link #check()} は FALSE を返す.
-             * </p>
-             *
-             * @param <A>
-             *            マッピングの変換先クラス.
-             * @param classObject
-             *            クラス情報.
-             * @return キャスト後のチェックストリーム.
-             * @throws NullPointerException
-             *             クラス情報が NULL の場合.
-             * @see #instanceOf(Class)
-             * @since 0.1
-             */
-            <A> Argument.OfObj<A> toCast(Class<? extends A> classObject);
-
-            /**
-             * <p>
-             * 指定されたマッピングを用いてチェック対象を変換する.
-             * </p>
-             * <p>
-             * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
-             * {@link Argument#check() check()} は FALSE を返す.
-             * </p>
-             *
-             * @param <X>
-             *            変換中に発生するエラークラス.
-             * @param mapping
-             *            チェック対象の変換に用いるマッピング.
-             * @return チェック対象変換後のチェックストリーム.
-             * @throws NullPointerException
-             *             チェック対象の変換に用いるマッピングが NULL の場合.
-             * @throws X
-             *             変換中にエラーが発生した場合.
-             * @since 0.1
-             */
-            @Override
-            <X extends Throwable> Argument.OfDouble toDouble(
-                    FunctionWithThrown.OfObjToDouble<? super T, ? extends X> mapping) throws X;
-
-            /**
-             * <p>
-             * 指定されたマッピングを用いてチェック対象を変換する.
-             * </p>
-             * <p>
-             * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
-             * {@link Argument#check() check()} は FALSE を返す.
-             * </p>
-             *
-             * @param <X>
-             *            変換中に発生するエラークラス.
-             * @param mapping
-             *            チェック対象の変換に用いるマッピング.
-             * @return チェック対象変換後のチェックストリーム.
-             * @throws NullPointerException
-             *             チェック対象の変換に用いるマッピングが NULL の場合.
-             * @throws X
-             *             変換中にエラーが発生した場合.
-             * @since 0.1
-             */
-            @Override
-            <X extends Throwable> Argument.OfInt toInt(FunctionWithThrown.OfObjToInt<? super T, ? extends X> mapping)
-                    throws X;
-
-            /**
-             * チェック対象をハッシュ値に変換する.
-             *
-             * @implSpec ハッシュ値変換には {@link Objects#hashCode(Object)} を用いている.
-             * @return チェック対象変換後のチェックストリーム.
-             * @see #mapToInt(ToIntFunction)
-             * @since 0.1
-             */
-            default Argument.OfInt toHash() {
-                return this.toInt(target -> Objects.hashCode(target));
-            }
-
-            /**
-             * <p>
-             * 指定されたマッピングを用いてチェック対象を変換する.
-             * </p>
-             * <p>
-             * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
-             * {@link Argument#check() check()} は FALSE を返す.
-             * </p>
-             *
-             * @param <X>
-             *            変換中に発生するエラークラス.
-             * @param mapping
-             *            チェック対象の変換に用いるマッピング.
-             * @return チェック対象変換後のチェックストリーム.
-             * @throws NullPointerException
-             *             チェック対象の変換に用いるマッピングが NULL の場合.
-             * @throws X
-             *             変換中にエラーが発生した場合.
-             * @since 0.1
-             */
-            @Override
-            <X extends Throwable> Argument.OfLong toLong(FunctionWithThrown.OfObjToLong<? super T, ? extends X> mapping)
-                    throws X;
-        }
-
-        /**
-         * チェック対象の変換機構を取得する.
-         *
-         * @return チェック対象の変換機構.
-         * @since 0.1
-         */
-        Argument.OfObj.Mappper<T> map();
+        @Override
+        Argument.ObjMapper<T> map();
     }
 
     /**
@@ -1544,4 +1402,161 @@ public interface Argument {
      * @since 0.1
      */
     boolean check();
+
+    /**
+     * マッピングによるオブジェクト引数の前提条件の変換機構.
+     *
+     * @author Se-foo
+     * @param <T>
+     *            マッピング変換元のチェック対象クラス.
+     * @since 0.1
+     */
+    static interface ObjMapper<T> extends Mapper.FromObj<T, Argument> {
+
+        /**
+         * <p>
+         * 指定されたマッピングを用いてチェック対象を変換する.
+         * </p>
+         * <p>
+         * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link Argument#check()
+         * check()} は FALSE を返す.
+         * </p>
+         *
+         * @param <R>
+         *            マッピングの変換先クラス.
+         * @param <X>
+         *            変換中に発生するエラークラス.
+         * @param mapping
+         *            チェック対象の変換に用いるマッピング.
+         * @return チェック対象変換後のチェックストリーム.
+         * @throws NullPointerException
+         *             チェック対象の変換に用いるマッピングが NULL の場合.
+         * @throws X
+         *             変換中にエラーが発生した場合.
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        @Override
+        <R, X extends Throwable> Argument.OfObj<R> toObj(
+                FunctionWithThrown.OfObj<? super T, ? extends R, ? extends X> mapping) throws X;
+
+        /**
+         * <p>
+         * チェック対象をキャストする.
+         * </p>
+         * <p>
+         * チェック対象が指定されたクラスを継承していない場合, 本メソッド以降のフィルタ・マッピング処理は無視され,
+         * {@link Argument#check() check()} は FALSE を返す.
+         * </p>
+         *
+         * @param <R>
+         *            マッピングの変換先クラス.
+         * @param classObject
+         *            クラス情報.
+         * @return キャスト後のチェックストリーム.
+         * @throws NullPointerException
+         *             クラス情報が NULL の場合.
+         * @see #instanceOf(Class)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        <R> Argument.OfObj<R> toCast(Class<? extends R> classObject);
+
+        /**
+         * <p>
+         * 指定されたマッピングを用いてチェック対象を変換する.
+         * </p>
+         * <p>
+         * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link Argument#check()
+         * check()} は FALSE を返す.
+         * </p>
+         *
+         * @param <X>
+         *            変換中に発生するエラークラス.
+         * @param mapping
+         *            チェック対象の変換に用いるマッピング.
+         * @return チェック対象変換後のチェックストリーム.
+         * @throws NullPointerException
+         *             チェック対象の変換に用いるマッピングが NULL の場合.
+         * @throws X
+         *             変換中にエラーが発生した場合.
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        @Override
+        <X extends Throwable> Argument.OfDouble toDouble(
+                FunctionWithThrown.OfObjToDouble<? super T, ? extends X> mapping) throws X;
+
+        /**
+         * <p>
+         * 指定されたマッピングを用いてチェック対象を変換する.
+         * </p>
+         * <p>
+         * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link Argument#check()
+         * check()} は FALSE を返す.
+         * </p>
+         *
+         * @param <X>
+         *            変換中に発生するエラークラス.
+         * @param mapping
+         *            チェック対象の変換に用いるマッピング.
+         * @return チェック対象変換後のチェックストリーム.
+         * @throws NullPointerException
+         *             チェック対象の変換に用いるマッピングが NULL の場合.
+         * @throws X
+         *             変換中にエラーが発生した場合.
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        @Override
+        <X extends Throwable> Argument.OfInt toInt(FunctionWithThrown.OfObjToInt<? super T, ? extends X> mapping)
+                throws X;
+
+        /**
+         * チェック対象をハッシュ値に変換する.
+         *
+         * @implSpec ハッシュ値変換には {@link Objects#hashCode(Object)} を用いている.
+         * @return チェック対象変換後のチェックストリーム.
+         * @see #mapToInt(ToIntFunction)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfInt toHash() {
+            return this.toInt(target -> Objects.hashCode(target));
+        }
+
+        /**
+         * <p>
+         * 指定されたマッピングを用いてチェック対象を変換する.
+         * </p>
+         * <p>
+         * 変換中にエラーが発生した場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link Argument#check()
+         * check()} は FALSE を返す.
+         * </p>
+         *
+         * @param <X>
+         *            変換中に発生するエラークラス.
+         * @param mapping
+         *            チェック対象の変換に用いるマッピング.
+         * @return チェック対象変換後のチェックストリーム.
+         * @throws NullPointerException
+         *             チェック対象の変換に用いるマッピングが NULL の場合.
+         * @throws X
+         *             変換中にエラーが発生した場合.
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        @Override
+        <X extends Throwable> Argument.OfLong toLong(FunctionWithThrown.OfObjToLong<? super T, ? extends X> mapping)
+                throws X;
+    }
+
+    /**
+     * チェック対象の変換機構を取得する.
+     *
+     * @return チェック対象の変換機構.
+     * @since 0.1
+     */
+    Mapper<Argument> map();
+
 }
