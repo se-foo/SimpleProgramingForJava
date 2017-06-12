@@ -9,6 +9,7 @@ http://opensource.org/licenses/mit-license.php
 package sp.base.var;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import sp.lang.ShallowCopyable;
@@ -45,7 +46,10 @@ abstract class ArgumentImpl implements Argument, ShallowCopyable<ArgumentImpl> {
          */
         @Override
         protected String getTargetString() {
-            return Objects.toString(this.target);
+            final String format = "%s:%s";
+            return Optional.ofNullable(this.target)
+                    .map(target -> String.format(format, target.getClass().getName(), target.toString()))
+                    .orElse("null");
         }
 
         /**
