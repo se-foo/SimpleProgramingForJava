@@ -141,6 +141,17 @@ abstract class ArgumentImpl implements Argument, ShallowCopyable<ArgumentImpl> {
         /*
          * (非 Javadoc)
          *
+         * @see sp.base.var.Argument.OfObj#map()
+         */
+        @Override
+        public Argument.OfObj.Mapper<T> map() {
+            // TODO : Implements Mapper.
+            return null;
+        }
+
+        /*
+         * (非 Javadoc)
+         *
          * @see sp.base.var.ArgumentImpl#clone()
          */
         @Override
