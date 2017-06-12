@@ -8,6 +8,8 @@ http://opensource.org/licenses/mit-license.php
 */
 package sp.base.var;
 
+import sp.base.NonNullReturnValue;
+
 /**
  * 変数の前提条件記述のファクトリークラス.
  *
@@ -25,6 +27,7 @@ public final class Variable {
      *            引数.
      * @return 引数の前提条件.
      */
+    @NonNullReturnValue
     public static <T> Argument.OfObj<T> arg(T target) {
         return new ArgumentImpl.OfObj<>(target);
     }
