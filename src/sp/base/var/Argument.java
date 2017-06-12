@@ -145,12 +145,12 @@ public interface Argument {
          * @return 本チェックストリーム.
          * @throws NullPointerException
          *             チェック対象が NULL の場合.
-         * @see #requireNotNull(Supplier)
+         * @see #requireNonNull(Supplier)
          * @since 0.1
          */
         @NonNullReturnValue
-        default Argument.OfObj<T> requireNotNull() {
-            return this.requireNotNull(() -> null);
+        default Argument.OfObj<T> requireNonNull() {
+            return this.requireNonNull(() -> null);
         }
 
         /**
@@ -167,11 +167,11 @@ public interface Argument {
          * @return 本チェックストリーム.
          * @throws NullPointerException
          *             チェック対象が NULL の場合.
-         * @see #requireNotNull(Supplier)
+         * @see #requireNonNull(Supplier)
          * @since 0.1
          */
-        default Argument.OfObj<T> requireNotNull(CharSequence message) {
-            return this.requireNotNull(() -> message);
+        default Argument.OfObj<T> requireNonNull(CharSequence message) {
+            return this.requireNonNull(() -> message);
         }
 
         /**
@@ -192,7 +192,7 @@ public interface Argument {
          * @since 0.1
          */
         @NonNullReturnValue
-        default Argument.OfObj<T> requireNotNull(Supplier<? extends CharSequence> message) {
+        default Argument.OfObj<T> requireNonNull(Supplier<? extends CharSequence> message) {
             Objects.requireNonNull(message);
 
             return this.require(target -> Objects.nonNull(target), target -> new NullPointerException(
@@ -297,7 +297,7 @@ public interface Argument {
          * @see #filter(sp.util.function.PredicateWithThrown.OfObj)
          * @since 0.1
          */
-        default Argument.OfObj<T> notNull() {
+        default Argument.OfObj<T> nonNull() {
             return this.filter(target -> Objects.nonNull(target));
         }
 
