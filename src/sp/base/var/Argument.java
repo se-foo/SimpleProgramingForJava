@@ -480,7 +480,7 @@ public interface Argument {
              * @since 0.1
              */
             @Override
-            <X extends Throwable> Argument toLong(FunctionWithThrown.OfObjToLong<? super T, ? extends X> mapping)
+            <X extends Throwable> Argument.OfLong toLong(FunctionWithThrown.OfObjToLong<? super T, ? extends X> mapping)
                     throws X;
         }
 
