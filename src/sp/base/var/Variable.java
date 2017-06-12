@@ -26,8 +26,7 @@ public final class Variable {
      * @return 引数の前提条件.
      */
     public static <T> Argument.OfObj<T> arg(T target) {
-        // TODO : Implement Argument.OfObj.
-        return null;
+        return new ArgumentImpl.OfObj<>(target);
     }
 
     /**
