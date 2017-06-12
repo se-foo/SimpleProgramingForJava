@@ -21,11 +21,15 @@ public class Argument_OfObjTddTest {
     @Test
     public void test() {
 
+        // Check exception from #requireInstanceOf
+        this.thrown.expect(ClassCastException.class);
+        this.thrown.expectMessage("Implements No Double.");
+
         // Variable#arg
         String target = "test";
         Argument.OfObj<String> instance = Variable.arg(target);
         assertThat(instance, notNullValue());
-        System.out.println(instance);
+        System.out.println(instance + ":" + instance.hashCode());
 
         // #orElse
         assertThat(instance.orElse("other"), is(target));
@@ -43,6 +47,8 @@ public class Argument_OfObjTddTest {
 
         // #instanceOf
         assertThat(instance.instanceOf(CharSequence.class), is(instance));
-    }
 
+        // #requireInstanceOf
+        assertThat(instance.requireInstanceOf(Double.class, "Implements No Double."), is(instance));
+    }
 }
