@@ -18,6 +18,8 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 import java.util.function.IntSupplier;
+import java.util.function.LongFunction;
+import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
@@ -581,7 +583,7 @@ public interface Argument {
          *             チェック内容及びエラー生成関数が NULL, 又はエラー生成関数の呼び出し結果が NULL の場合.
          * @throws X
          *             チェック対象がチェック内容に沿っていない場合.
-         * @see #filter(sp.util.function.PredicateWithThrown.OfObj)
+         * @see #filter(sp.util.function.PredicateWithThrown.OfDouble)
          * @since 0.1
          */
         @NonNullReturnValue
@@ -1220,6 +1222,316 @@ public interface Argument {
             }
 
             return this.filter(target -> target >= 0 && target < size);
+        }
+
+        // TODO : need #map()
+    }
+
+    /**
+     * long 引数の前提条件.
+     *
+     * @author Se-foo
+     * @since 0.1
+     */
+    static interface OfLong extends Argument {
+
+        /**
+         * <p>
+         * チェック対象を取得する.
+         * </p>
+         * <p>
+         * チェック対象がチェック内容に沿っていない場合, 指定された値 other を返す.
+         * </p>
+         *
+         * @param other
+         *            チェック対象がチェック内容に沿っていない場合の値.
+         * @return チェック対象又は other.
+         * @throws NullPointerException
+         *             チェック対象がチェック内容に沿っていない場合の値が NULL の場合.
+         * @see #orElseGet(Supplier)
+         * @since 0.1
+         */
+        default long orElse(long other) {
+            return this.orElseGet(() -> other);
+        }
+
+        /**
+         * <p>
+         * チェック対象を取得する.
+         * </p>
+         * <p>
+         * チェック対象がチェック内容に沿っていない場合, 戻り値生成関数 other を呼び出し, その結果を返す.
+         * </p>
+         *
+         * @param other
+         *            チェック対象がチェック内容に沿っていない場合の戻り値生成関数.
+         * @return チェック対象又は戻り値生成関数 other の呼び出し結果.
+         * @throws NullPointerException
+         *             チェック対象がチェック内容に沿っていない場合の戻り値生成関数が NULL, 又は戻り値生成関数の呼び出し結果が
+         *             NULL の場合.
+         * @see #check()
+         * @since 0.1
+         */
+        long orElseGet(DoubleSupplier other);
+
+        /**
+         * <p>
+         * チェック対象が指定されたチェック内容に沿っているか確認する.
+         * </p>
+         * <p>
+         * チェック内容に沿っていない場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE
+         * を返す.
+         * </p>
+         *
+         * @param <X>
+         *            チェック中に発生する例外クラス.
+         * @param filter
+         *            チェック内容.
+         * @return 本チェックストリーム.
+         * @throws NullPointerException
+         *             チェック内容が NULL の場合.
+         * @throws X
+         *             チェック中にエラーが発生した場合.
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        <X extends Throwable> Argument.OfLong filter(PredicateWithThrown.OfLong<? extends X> filter) throws X;
+
+        /**
+         * <p>
+         * チェック対象がチェック内容に沿っているか確認する.
+         * </p>
+         * <p>
+         * チェック内容に沿っていない場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE
+         * を返す.
+         * </p>
+         *
+         * @param <X>
+         *            チェック対象がチェック内容に沿っていない場合の例外クラス.
+         * @param predicate
+         *            チェック内容.
+         * @param throwable
+         *            チェック対象がチェック内容に沿っていない場合にスローする例外生成関数.
+         * @return 本チェックストリーム.
+         * @throws NullPointerException
+         *             チェック内容及びエラー生成関数が NULL, 又はエラー生成関数の呼び出し結果が NULL の場合.
+         * @throws X
+         *             チェック対象がチェック内容に沿っていない場合.
+         * @see #filter(sp.util.function.PredicateWithThrown.OfLong)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default <X extends Throwable> Argument.OfLong require(LongPredicate predicate,
+                LongFunction<? extends X> throwable) throws X {
+            Objects.requireNonNull(predicate);
+            Objects.requireNonNull(throwable);
+
+            return this.filter(target -> {
+                if (predicate.test(target)) {
+                    return true;
+                } else {
+                    throw Objects.requireNonNull(throwable.apply(target));
+                }
+            });
+        }
+
+        /**
+         * <p>
+         * チェック対象が負でないことを確認する.
+         * </p>
+         * <p>
+         * チェック対象が負の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             チェック対象が負の場合.
+         * @see #requireNonNegative(Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireNonNegative() {
+            return this.requireNonNegative(() -> null);
+        }
+
+        /**
+         * <p>
+         * チェック対象が負でないことを確認する.
+         * </p>
+         * <p>
+         * チェック対象が負の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param message
+         *            チェック対象が NULL の場合のエラーメッセージ.
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             チェック対象が負の場合.
+         * @see #requireNonNegative(Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireNonNegative(CharSequence message) {
+            return this.requireNonNegative(() -> message);
+        }
+
+        /**
+         * <p>
+         * チェック対象が負でないことを確認する.
+         * </p>
+         * <p>
+         * チェック対象が負の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @param message
+         *            チェック対象が負の場合のエラーメッセージ生成関数.
+         * @return 本チェックストリーム.
+         * @throws NullPointerException
+         *             エラーメッセージ生成関数が NULL の場合.
+         * @throws IllegalArgumentException
+         *             チェック対象が負の場合.
+         * @see #require(LongPredicate, LongFunction)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireNonNegative(Supplier<? extends CharSequence> message) {
+            Objects.requireNonNull(message);
+
+            return this.require(target -> target >= 0, target -> new IllegalArgumentException(
+                    Optional.ofNullable(message.get()).map(m -> m.toString()).orElse(null)));
+        }
+
+        /**
+         * <p>
+         * チェック対象が始端 (from, これを含む) と終端 (to, これを含まない) の間であることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が指定された範囲外の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は
+         * FALSE を返す.
+         * </p>
+         *
+         * @param from
+         *            始端. (これを含む)
+         * @param to
+         *            終端. (これを含まない)
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         * @see #requireBounds(long, long, Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireBounds(long from, long to) {
+
+            // throw IllegalArgumentException if from > to at #requireBounds.
+            return this.requireBounds(from, to, () -> null);
+        }
+
+        /**
+         * <p>
+         * チェック対象が始端 (from, これを含む) と終端 (to, これを含まない) の間であることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が指定された範囲外の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は
+         * FALSE を返す.
+         * </p>
+         *
+         * @param from
+         *            始端. (これを含む)
+         * @param to
+         *            終端. (これを含まない)
+         * @param message
+         *            チェック対象が指定された範囲外の場合のエラーメッセージ.
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         * @see #requireBounds(double, double, Supplier)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireBounds(long from, long to, CharSequence message) {
+
+            // throw IllegalArgumentException if from > to at #requireBounds.
+            return this.requireBounds(from, to, () -> message);
+        }
+
+        /**
+         * <p>
+         * チェック対象が始端 (from, これを含む) と終端 (to, これを含まない) の間であることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が指定された範囲外の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は
+         * FALSE を返す.
+         * </p>
+         *
+         * @param from
+         *            始端. (これを含む)
+         * @param to
+         *            終端. (これを含まない)
+         * @param message
+         *            チェック対象が指定された範囲外の場合のエラーメッセージ生成関数.
+         * @return 本チェックストリーム.
+         * @throws NullPointerException
+         *             エラーメッセージ生成関数が NULL の場合.
+         * @throws IllegalArgumentException
+         *             指定された始端が終端より大きい場合, 又はチェック対象がチェック対象が指定された範囲外の場合.
+         * @see #require(LongPredicate, LongFunction)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong requireBounds(long from, long to, Supplier<? extends CharSequence> message) {
+            if (from > to) {
+                throw new IllegalArgumentException();
+            }
+            Objects.requireNonNull(message);
+
+            return this.require(target -> target >= from && target < to, target -> new IllegalArgumentException(
+                    Optional.ofNullable(message.get()).map(m -> m.toString()).orElse(null)));
+        }
+
+        /**
+         * <p>
+         * チェック対象が負でないことを確認する.
+         * </p>
+         * <p>
+         * チェック対象が負の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は FALSE を返す.
+         * </p>
+         *
+         * @return 本チェックストリーム.
+         * @see #filter(sp.util.function.PredicateWithThrown.OfDouble)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong nonNegative() {
+            return this.filter(target -> target >= 0);
+        }
+
+        /**
+         * <p>
+         * チェック対象が始端 (from, これを含む) と終端 (to, これを含まない) の間であることを確認する.
+         * </p>
+         * <p>
+         * チェック対象が指定された範囲外の場合, 本メソッド以降のフィルタ・マッピング処理は無視され, {@link #check()} は
+         * FALSE を返す.
+         * </p>
+         *
+         * @param from
+         *            始端. (これを含む)
+         * @param to
+         *            終端. (これを含まない)
+         * @return 本チェックストリーム.
+         * @throws IllegalArgumentException
+         *             指定された始端が終端より大きい場合.
+         * @see #filter(sp.util.function.PredicateWithThrown.OfLong)
+         * @since 0.1
+         */
+        @NonNullReturnValue
+        default Argument.OfLong isBounds(long from, long to) {
+            if (from > to) {
+                throw new IllegalArgumentException();
+            }
+
+            return this.filter(target -> target >= from && target < to);
         }
 
         // TODO : need #map()
