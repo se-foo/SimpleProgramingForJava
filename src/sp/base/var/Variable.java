@@ -33,6 +33,19 @@ public final class Variable {
     }
 
     /**
+     * 指定された変数のチェックリストを作成する.
+     *
+     * @param <T>
+     *            指定された変数クラス.
+     * @return 変数のチェックリスト.
+     */
+    @NonNullReturnValue
+    public static <T> Checklist.OfObj<T> checklist() {
+        // TODO : Implements Checklist.OfObj
+        return null;
+    }
+
+    /**
      * Constractor.
      */
     Variable() {
